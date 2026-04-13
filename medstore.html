@@ -185,9 +185,9 @@
   .detail-layout { display:grid; grid-template-columns:1fr 380px; gap:40px; max-width:1100px; margin:40px auto; padding:0 24px; }
   .detail-left { }
   .detail-thumb {
-    height:280px; background:linear-gradient(135deg,var(--sky),var(--mint));
+    height:340px; background:linear-gradient(135deg,var(--sky),var(--mint));
     border-radius:var(--radius); display:flex; align-items:center; justify-content:center;
-    font-size:5rem; margin-bottom:24px;
+    font-size:5rem; margin-bottom:24px; overflow:hidden;
   }
   .detail-cat { font-size:.8rem; font-weight:700; color:var(--teal); text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
   .detail-title { font-family:'Playfair Display',serif; font-size:2rem; color:var(--navy); margin-bottom:16px; line-height:1.3; }
@@ -417,13 +417,199 @@
   .thumb-podcasts { background:linear-gradient(135deg,#F3E5F5,#E1BEE7); }
   .thumb-default { background:linear-gradient(135deg,#F1F5F9,#E2E8F0); }
 
+  /* ─── DOWNLOAD LINK BOX ─── */
+  .download-box {
+    background: linear-gradient(135deg, #E8F5E9, #E3F2FD);
+    border: 2px solid var(--teal); border-radius: var(--radius);
+    padding: 28px; text-align: center; margin-top: 20px;
+    animation: popIn .4s cubic-bezier(.175,.885,.32,1.275);
+  }
+  @keyframes popIn { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:scale(1); } }
+  .download-box .dl-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .download-box h3 { color: var(--navy); font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+  .download-box p { color: var(--gray-600); font-size: .88rem; margin-bottom: 16px; }
+  .btn-download {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 13px 28px; border-radius: 50px;
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    color: #fff; font-weight: 700; font-size: 1rem; text-decoration: none;
+    box-shadow: var(--shadow-md); transition: all .25s; border: none; cursor: pointer;
+  }
+  .btn-download:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .order-lookup-box {
+    max-width: 480px; margin: 60px auto; padding: 0 24px;
+  }
+  .order-lookup-card {
+    background: var(--white); border-radius: var(--radius); padding: 40px;
+    box-shadow: var(--shadow-lg); border: 1px solid var(--gray-200); text-align: center;
+  }
+  .order-lookup-card .ol-icon { font-size: 3rem; margin-bottom: 16px; }
+  .order-lookup-card h2 { font-family: 'Playfair Display',serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 8px; }
+  .order-lookup-card p { color: var(--gray-600); font-size: .93rem; margin-bottom: 28px; line-height: 1.6; }
+  .order-result-card {
+    background: var(--white); border-radius: var(--radius); padding: 28px;
+    box-shadow: var(--shadow-md); border: 1px solid var(--gray-200); margin-top: 20px; text-align: left;
+  }
   .progress-bar { height:6px; background:var(--gray-200); border-radius:3px; overflow:hidden; }
   .progress-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--blue),var(--teal)); transition:width .4s; }
   
   .sales-chart { display:flex; align-items:flex-end; gap:8px; height:80px; }
   .chart-bar { flex:1; background:linear-gradient(180deg,var(--blue-light),var(--blue)); border-radius:4px 4px 0 0; opacity:.8; }
   
+  /* real slide in detail page gets full height */
+  .detail-thumb .real-slide-wrap {
+    border-radius: var(--radius) !important;
+    width: 100% !important; height: 100% !important;
+  }
+  .detail-thumb .real-slide-wrap iframe {
+    width: 160% !important; height: 160% !important;
+    transform: scale(0.625) !important; transform-origin: 0 0 !important;
+  }
+
   .notification-dot { width:8px; height:8px; border-radius:50%; background:var(--red); display:inline-block; margin-left:4px; vertical-align:middle; }
+
+  /* ─── ANIMATED PREVIEW SYSTEM ─── */
+  .preview-wrap {
+    height:220px; position:relative; overflow:hidden; cursor:pointer;
+    border-radius:var(--radius) var(--radius) 0 0;
+  }
+  .preview-label {
+    position:absolute; top:10px; right:10px; z-index:10;
+    background:rgba(0,0,0,.45); color:#fff; font-size:.68rem; font-weight:700;
+    padding:3px 8px; border-radius:50px; letter-spacing:.04em; backdrop-filter:blur(4px);
+  }
+
+  /* SLIDE FLIPPER */
+  .slide-flipper { width:100%; height:100%; position:relative; }
+  .slide-frame {
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; justify-content:space-between; padding:16px 18px 28px;
+    opacity:0; transform:translateX(40px);
+    transition:opacity .5s, transform .5s; pointer-events:none;
+  }
+  .slide-frame.active { opacity:1; transform:translateX(0); pointer-events:auto; }
+  .slide-frame.exit { opacity:0; transform:translateX(-40px); }
+  .sf-cover { background:linear-gradient(135deg,#0B1F3A 0%,#1565C0 60%,#00796B 100%); color:#fff; }
+  .sf-cover .sf-top { display:flex; justify-content:space-between; align-items:flex-start; }
+  .sf-cover .sf-logo { font-size:2rem; }
+  .sf-cover .sf-tag { background:rgba(255,255,255,.15); font-size:.65rem; font-weight:700; padding:3px 8px; border-radius:50px; text-transform:uppercase; letter-spacing:.06em; }
+  .sf-cover .sf-title { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; line-height:1.35; }
+  .sf-cover .sf-sub { font-size:.7rem; opacity:.7; margin-top:4px; }
+  .sf-cover .sf-bars { display:flex; gap:4px; margin-top:6px; }
+  .sf-cover .sf-bar { height:3px; border-radius:2px; background:rgba(255,255,255,.5); }
+  .sf-content { background:#fff; }
+  .sf-content .sf-heading { font-size:.72rem; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; border-left:3px solid var(--blue); padding-left:8px; }
+  .sf-content .sf-bullets { list-style:none; }
+  .sf-content .sf-bullets li { font-size:.7rem; color:var(--gray-600); padding:2.5px 0; display:flex; align-items:center; gap:6px; }
+  .sf-content .sf-bullets li::before { content:''; width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0; }
+  .sf-content .sf-chart { display:flex; align-items:flex-end; gap:3px; height:32px; margin-top:8px; }
+  .sf-content .sf-chart span { flex:1; border-radius:3px 3px 0 0; opacity:.85; }
+  .sf-end { background:linear-gradient(135deg,#00796B,#1565C0); color:#fff; text-align:center; align-items:center; justify-content:center; gap:6px; padding:20px; }
+  .sf-end .sf-lock { font-size:2rem; margin-bottom:4px; }
+  .sf-end .sf-cta { font-family:'Playfair Display',serif; font-size:.95rem; font-weight:700; }
+  .sf-end .sf-cta-sub { font-size:.7rem; opacity:.8; }
+  .sf-end .sf-btn { margin-top:10px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.4); color:#fff; font-size:.72rem; font-weight:700; padding:5px 14px; border-radius:50px; }
+  .slide-dots {
+    position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+    display:flex; gap:5px; z-index:5;
+  }
+  .slide-dot { width:6px; height:6px; border-radius:3px; background:rgba(255,255,255,.35); transition:all .3s; }
+  .slide-dot.active { width:18px; background:rgba(255,255,255,.9); }
+  .slide-dot.dark { background:rgba(0,0,0,.2); }
+  .slide-dot.dark.active { background:var(--blue); }
+
+  /* VIDEO PREVIEW */
+  .video-preview {
+    width:100%; height:100%; position:relative;
+    background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+  }
+  .video-preview .vp-grid {
+    position:absolute; inset:0; opacity:.1;
+    background:repeating-linear-gradient(0deg,transparent,transparent 20px,rgba(255,255,255,.05) 20px,rgba(255,255,255,.05) 21px),
+               repeating-linear-gradient(90deg,transparent,transparent 20px,rgba(255,255,255,.05) 20px,rgba(255,255,255,.05) 21px);
+  }
+  .video-preview .vp-thumb {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;
+  }
+  .video-preview .vp-play {
+    width:56px; height:56px; border-radius:50%;
+    background:rgba(255,255,255,.15); border:2px solid rgba(255,255,255,.6);
+    display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+    animation:vPulse 2s ease-in-out infinite; backdrop-filter:blur(4px);
+  }
+  @keyframes vPulse {
+    0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.3);}
+    50%{box-shadow:0 0 0 16px rgba(255,255,255,0);}
+  }
+  .video-preview .vp-title { color:#fff; font-size:.75rem; font-weight:600; opacity:.9; }
+  .video-preview .vp-dur { color:rgba(255,255,255,.5); font-size:.68rem; }
+  .video-preview .vp-strip {
+    position:absolute; bottom:0; left:0; right:0;
+    background:rgba(0,0,0,.5); padding:8px 12px; backdrop-filter:blur(4px);
+  }
+  .video-preview .vp-ep-row { display:flex; gap:3px; margin-bottom:5px; }
+  .video-preview .vp-ep { height:3px; flex:1; border-radius:2px; background:rgba(255,255,255,.15); overflow:hidden; }
+  .video-preview .vp-ep-f { height:100%; }
+  .video-preview .vp-ep-f.done { width:100%; background:rgba(255,255,255,.7); }
+  .video-preview .vp-ep-f.now { background:var(--teal-light); animation:epFill 3s linear forwards; }
+  @keyframes epFill{from{width:20%;}to{width:100%;}}
+  .video-preview .vp-scrub { height:3px; background:rgba(255,255,255,.15); border-radius:2px; overflow:hidden; }
+  .video-preview .vp-prog { height:100%; background:linear-gradient(90deg,var(--teal-light),var(--blue-light)); animation:vProg 5s linear infinite; }
+  @keyframes vProg{from{width:0%;}to{width:100%;}}
+
+  /* PODCAST PREVIEW */
+  .podcast-preview {
+    width:100%; height:100%; position:relative; overflow:hidden;
+    background:linear-gradient(135deg,#2D1B69,#11998e);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  }
+  .podcast-preview::before {
+    content:''; position:absolute; top:-30px; left:-30px; width:120px; height:120px;
+    border-radius:50%; background:rgba(255,255,255,.05);
+  }
+  .podcast-preview::after {
+    content:''; position:absolute; bottom:-20px; right:-20px; width:90px; height:90px;
+    border-radius:50%; background:rgba(255,255,255,.05);
+  }
+  .podcast-preview .pp-icon { font-size:1.8rem; z-index:2; }
+  .podcast-preview .pp-ep { font-size:.68rem; font-weight:700; color:rgba(255,255,255,.6); text-transform:uppercase; letter-spacing:.06em; z-index:2; }
+  .podcast-preview .pp-title { color:#fff; font-size:.78rem; font-weight:600; z-index:2; opacity:.9; text-align:center; padding:0 16px; }
+  .podcast-preview .pp-controls { display:flex; gap:10px; align-items:center; z-index:2; }
+  .podcast-preview .pp-btn { width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;border:1px solid rgba(255,255,255,.25); }
+  .podcast-preview .pp-btn.main { width:44px;height:44px;font-size:1.1rem;background:rgba(255,255,255,.22);animation:vPulse 2s ease-in-out infinite; }
+  .podcast-preview .pp-wave { display:flex; align-items:center; gap:2px; height:30px; z-index:2; }
+  .podcast-preview .pp-b { width:3px; border-radius:2px; background:rgba(255,255,255,.65); animation:wv 1s ease-in-out infinite; }
+  @keyframes wv{0%,100%{transform:scaleY(.25);}50%{transform:scaleY(1);}}
+  .podcast-preview .pp-bar-wrap { width:75%; z-index:2; }
+  .podcast-preview .pp-bar-bg { height:3px; background:rgba(255,255,255,.2); border-radius:2px; overflow:hidden; }
+  .podcast-preview .pp-bar-fill { height:100%; background:rgba(255,255,255,.8); animation:podProg 7s linear infinite; }
+  @keyframes podProg{from{width:10%;}to{width:90%;}}
+
+  /* BOOK 3D */
+  .book-preview {
+    width:100%; height:100%; position:relative;
+    background:linear-gradient(135deg,#E8F5E9,#E3F2FD);
+    display:flex; align-items:center; justify-content:center;
+    perspective:800px;
+  }
+  .book-3d { width:90px; position:relative; transform-style:preserve-3d; animation:bookFloat 3s ease-in-out infinite; }
+  @keyframes bookFloat{0%,100%{transform:rotateY(-18deg) rotateX(5deg) translateY(0);}50%{transform:rotateY(-22deg) rotateX(8deg) translateY(-8px);}}
+  .book-page-b { position:absolute; top:4px; right:-7px; width:82px; height:112px; background:#f0f0e8; border-radius:0 5px 5px 0; box-shadow:2px 2px 4px rgba(0,0,0,.08); }
+  .book-page-a { position:absolute; top:2px; right:-4px; width:86px; height:116px; background:#f8f8f0; border-radius:0 6px 6px 0; box-shadow:2px 2px 6px rgba(0,0,0,.1); }
+  .book-cover {
+    width:90px; height:120px; border-radius:2px 8px 8px 2px; position:relative; overflow:hidden;
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    display:flex; flex-direction:column; padding:12px 10px;
+    box-shadow:6px 6px 20px rgba(0,0,0,.3), -2px 0 0 #0a1628, -4px 1px 0 #0d1f3a;
+  }
+  .book-cover::before { content:''; position:absolute; left:0; top:0; bottom:0; width:8px; background:linear-gradient(90deg,rgba(0,0,0,.35),transparent); }
+  .book-cover .bc-icon { font-size:1.3rem; color:#fff; margin-bottom:6px; }
+  .book-cover .bc-title { font-size:.52rem; font-weight:700; color:rgba(255,255,255,.92); line-height:1.45; text-transform:uppercase; letter-spacing:.03em; }
+  .book-cover .bc-line { width:20px; height:2px; background:var(--teal-light); border-radius:1px; margin-top:6px; }
+  .book-cover .bc-author { font-size:.48rem; color:rgba(255,255,255,.45); margin-top:auto; }
+  .book-preview .bp-pages { position:absolute; bottom:12px; right:22px; font-size:.7rem; font-weight:600; color:var(--gray-500); }
+  .book-preview .bp-glow { position:absolute; top:30px; left:60px; width:60px; height:60px; border-radius:50%; background:rgba(21,101,192,.15); filter:blur(20px); }
 </style>
 </head>
 <body>
@@ -439,6 +625,7 @@
       <button class="nav-link active" onclick="showPage('home')">Home</button>
       <button class="nav-link" onclick="showPage('products')">Products</button>
       <button class="nav-link" onclick="scrollToSection('about')">About</button>
+      <button class="nav-link" onclick="showPage('myorders')">📦 My Orders</button>
       <button class="btn-admin" onclick="showLogin()">Admin ⚙️</button>
     </div>
     <div class="hamburger" onclick="toggleMobileMenu()">
@@ -590,7 +777,7 @@
           <button class="btn-action primary" onclick="openProductModal()">+ Add Product</button>
         </div>
         <div class="admin-card">
-          <table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Sales</th><th>Status</th><th>Actions</th></tr></thead>
+          <table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Sales</th><th>Download Link</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody id="productsTable"></tbody></table>
         </div>
       </div>
@@ -637,7 +824,7 @@
           </div>
         </div>
         <div class="admin-card">
-          <table><thead><tr><th>#</th><th>Date</th><th>Customer</th><th>Email</th><th>Product</th><th>Amount</th><th>Proof</th><th>Status</th><th>Action</th></tr></thead>
+          <table><thead><tr><th>#</th><th>Date</th><th>Customer</th><th>Email</th><th>Product</th><th>Amount</th><th>Proof</th><th>Download Sent</th><th>Status</th><th>Action</th></tr></thead>
           <tbody id="ordersTable"></tbody></table>
         </div>
       </div>
@@ -655,7 +842,26 @@
   </div>
 </div>
 
-<!-- ─── MODALS ─── -->
+<!-- MY ORDERS PAGE -->
+<div class="page" id="page-myorders">
+  <div class="order-lookup-box">
+    <div class="order-lookup-card">
+      <div class="ol-icon">📦</div>
+      <h2>Check Your Order</h2>
+      <p>Enter your Order ID or email address to check payment status and access your download link.</p>
+      <div class="form-group" style="text-align:left;">
+        <label class="form-label">Order ID or Email</label>
+        <input class="form-input" id="lookupInput" placeholder="e.g. ORD-1234 or your@email.com" style="font-size:1rem;padding:13px 16px;">
+      </div>
+      <button onclick="lookupOrder()" style="width:100%;padding:14px;border-radius:50px;background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff;border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;">
+        🔍 Find My Order
+      </button>
+      <div id="lookupResult" style="margin-top:20px;"></div>
+    </div>
+  </div>
+</div>
+
+
 
 <!-- LOGIN -->
 <div class="login-overlay" id="loginOverlay" style="display:none;">
@@ -717,6 +923,16 @@
           <option value="draft">Draft</option>
         </select>
       </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">👁 Preview Link (Google Drive / YouTube — optional)</label>
+      <input class="form-input" id="pPreviewLink" placeholder="https://drive.google.com/file/d/... (shown as free preview to clients)">
+      <div style="font-size:.78rem;color:var(--gray-400);margin-top:5px;">📌 Clients can view this free sample before buying.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">🔗 Download Link (Google Drive / Dropbox / any URL)</label>
+      <input class="form-input" id="pDownloadLink" placeholder="https://drive.google.com/file/... or https://dropbox.com/...">
+      <div style="font-size:.78rem;color:var(--gray-400);margin-top:5px;">📌 This link is sent to the client automatically after payment is approved.</div>
     </div>
     <div class="form-group">
       <label class="form-label">Features (one per line)</label>
@@ -781,27 +997,39 @@ let store = JSON.parse(localStorage.getItem('medstore') || 'null') || {
     { id:1, title:'Pediatric Assessment Masterclass', category:'slides', price:12, origPrice:18, badge:'hot',
       desc:'Comprehensive clinical assessment slides covering PEWS scoring, vital signs interpretation, and triage protocols for pediatric patients.',
       features:['60+ clinical slides','PEWS scoring guide','Printable PDF','Instant delivery'],
-      tags:['pediatrics','assessment','triage'], status:'active', sales:34, created:'2026-01-10' },
+      tags:['pediatrics','assessment','triage'], status:'active', sales:34, created:'2026-01-10',
+      downloadLink:'https://drive.google.com/file/d/example1',
+      previewLink:'https://drive.google.com/file/d/1b7PurhsO5VMF15Bp_ArsaHhL7Y6NYDM_/view?usp=sharing' },
     { id:2, title:'ICU Nursing Essentials', category:'slides', price:15, origPrice:22, badge:'new',
       desc:'Essential ICU nursing slides covering mechanical ventilation, hemodynamic monitoring, and critical care medications.',
       features:['75 slides','Hemodynamic charts','Drug quick-reference','Certificate template'],
-      tags:['ICU','critical care','nursing'], status:'active', sales:28, created:'2026-02-05' },
+      tags:['ICU','critical care','nursing'], status:'active', sales:28, created:'2026-02-05',
+      downloadLink:'https://drive.google.com/file/d/example2',
+      previewLink:'https://drive.google.com/file/d/1b7PurhsO5VMF15Bp_ArsaHhL7Y6NYDM_/view?usp=sharing' },
     { id:3, title:'Pharmacology Made Simple', category:'books', price:8, origPrice:0, badge:'',
       desc:'A compact digital reference guide to common drugs used in pediatric and general hospital settings.',
       features:['200+ drug entries','Dosage calculators','Side-effect tables','PDF format'],
-      tags:['pharmacology','drugs','reference'], status:'active', sales:52, created:'2026-01-20' },
+      tags:['pharmacology','drugs','reference'], status:'active', sales:52, created:'2026-01-20',
+      downloadLink:'https://drive.google.com/file/d/example3',
+      previewLink:'https://drive.google.com/file/d/1b7PurhsO5VMF15Bp_ArsaHhL7Y6NYDM_/view?usp=sharing' },
     { id:4, title:'Clinical Procedures Video Pack', category:'videos', price:20, origPrice:30, badge:'hot',
       desc:'12 HD video demonstrations of essential nursing procedures: catheter insertion, IV access, wound care, and more.',
       features:['12 procedure videos','HD quality','Step-by-step narration','Lifetime access'],
-      tags:['procedures','skills','video'], status:'active', sales:19, created:'2026-02-14' },
+      tags:['procedures','skills','video'], status:'active', sales:19, created:'2026-02-14',
+      downloadLink:'https://drive.google.com/file/d/example4',
+      previewLink:'https://drive.google.com/file/d/1b7PurhsO5VMF15Bp_ArsaHhL7Y6NYDM_/view?usp=sharing' },
     { id:5, title:'Nursing Leadership Podcast Series', category:'podcasts', price:6, origPrice:0, badge:'new',
       desc:'10-episode podcast series on nursing leadership, hospital management, and building high-performance healthcare teams.',
       features:['10 episodes','Total 5 hours','Interview format','Download & listen offline'],
-      tags:['leadership','management','nursing'], status:'active', sales:41, created:'2026-03-01' },
+      tags:['leadership','management','nursing'], status:'active', sales:41, created:'2026-03-01',
+      downloadLink:'https://drive.google.com/file/d/example5',
+      previewLink:'https://drive.google.com/file/d/1b7PurhsO5VMF15Bp_ArsaHhL7Y6NYDM_/view?usp=sharing' },
     { id:6, title:'Neonatal Care Slides Bundle', category:'slides', price:14, origPrice:20, badge:'',
       desc:'Complete neonatal nursing slides covering jaundice management, NICU protocols, breastfeeding support, and discharge planning.',
       features:['55 slides','NICU protocols','Scoring tools','Print-ready'],
-      tags:['neonatal','NICU','newborn'], status:'active', sales:23, created:'2026-03-15' },
+      tags:['neonatal','NICU','newborn'], status:'active', sales:23, created:'2026-03-15',
+      downloadLink:'https://drive.google.com/file/d/example6',
+      previewLink:'https://drive.google.com/file/d/1b7PurhsO5VMF15Bp_ArsaHhL7Y6NYDM_/view?usp=sharing' },
   ],
   orders: [
     { id:'ORD-001', date:'2026-04-01', customer:'Sophea Kim', email:'sophea@gmail.com', productId:1, amount:12, status:'paid', proof:null },
@@ -828,14 +1056,20 @@ function showPage(page) {
   currentPage = page;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
-  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
-  const map = { home:0, products:1 };
+  document.querySelectorAll('.nav-links .nav-link').forEach(l=>l.classList.remove('active'));
+  // highlight correct nav link
+  const navMap = { home:0, products:1, myorders:2 };
   const links = document.querySelectorAll('.nav-links .nav-link');
-  if (map[page] !== undefined) links[map[page]].classList.add('active');
+  if (navMap[page] !== undefined && links[navMap[page]]) links[navMap[page]].classList.add('active');
   window.scrollTo(0,0);
   if (page==='products') renderProducts();
   if (page==='home') renderHome();
   if (page==='admin' && isAdmin) renderAdmin();
+  if (page==='myorders') {
+    // clear previous results when navigating fresh
+    const lr = document.getElementById('lookupResult');
+    if (lr && !document.getElementById('lookupInput').value) lr.innerHTML='';
+  }
 }
 
 function goHome() { showPage('home'); }
@@ -876,6 +1110,10 @@ function renderHome() {
   // featured
   const featured = store.products.filter(p=>p.status==='active').sort((a,b)=>b.sales-a.sales).slice(0,3);
   document.getElementById('featuredGrid').innerHTML = featured.map(renderProductCard).join('');
+  setTimeout(()=>{
+    featured.forEach(p=>{ if(p.category==='slides'&&!p.previewLink) initSlider('sf_'+p.id); });
+    initAllRSP();
+  }, 200);
 }
 
 function filterByCategory(catId) {
@@ -901,6 +1139,10 @@ function renderProducts() {
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">🔍</div><p>No products found. Try a different search or category.</p></div>`;
   } else {
     grid.innerHTML = prods.map(renderProductCard).join('');
+    setTimeout(()=>{
+      prods.forEach(p=>{ if(p.category==='slides'&&!p.previewLink) initSlider('sf_'+p.id); });
+      initAllRSP();
+    }, 200);
   }
 }
 
@@ -909,24 +1151,346 @@ function filterProducts() { renderProducts(); }
 
 function renderProductCard(p) {
   const cat = getCat(p.category);
-  const thumb = thumbClass(p.category);
   const badge = p.badge ? `<div class="product-badge ${p.badge}">${p.badge.toUpperCase()}</div>` : '';
-  const discount = p.origPrice>0 ? Math.round((1-p.price/p.origPrice)*100) : 0;
+  const preview = buildPreview(p, cat);
   return `
     <div class="product-card" onclick="showProduct(${p.id})">
-      <div class="product-thumb ${thumb}">${cat.icon}${badge}</div>
+      <div class="preview-wrap">
+        ${preview}
+        ${badge}
+      </div>
       <div class="product-body">
         <div class="product-cat">${cat.name}</div>
         <div class="product-title">${p.title}</div>
-        <div class="product-desc">${p.desc.substring(0,90)}...</div>
+        <div class="product-desc">${p.desc.substring(0,88)}...</div>
         <div class="product-footer">
-          <div class="product-price"><span class="currency">$</span>${p.price}${p.origPrice>0?`<span style="font-size:.8rem;color:var(--gray-400);text-decoration:line-through;margin-left:6px;">$${p.origPrice}</span>`:''}
-          </div>
+          <div class="product-price"><span class="currency">$</span>${p.price}${p.origPrice>0?`<span style="font-size:.8rem;color:var(--gray-400);text-decoration:line-through;margin-left:6px;">$${p.origPrice}</span>`:''}</div>
           <button class="btn-buy" onclick="event.stopPropagation();showProduct(${p.id})">Buy Now</button>
         </div>
       </div>
     </div>`;
 }
+
+function buildPreview(p, cat) {
+  // ALL categories: if previewLink set → show real Drive iframe slideshow
+  if (p.previewLink) return buildRealSlidePreview(p);
+  // fallbacks by category
+  if (p.category === 'videos')   return buildVideoPreview(p);
+  if (p.category === 'podcasts') return buildPodcastPreview(p);
+  if (p.category === 'books')    return buildBookPreview(p);
+  return buildSlidePreview(p);
+}
+
+/* ── REAL GOOGLE DRIVE SLIDESHOW PREVIEW (all categories) ─────────── */
+function getDriveEmbedUrl(link) {
+  const m = link.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (!m) return link;
+  return `https://drive.google.com/file/d/${m[1]}/preview`;
+}
+
+function buildRealSlidePreview(p) {
+  const embedUrl = getDriveEmbedUrl(p.previewLink);
+  const sid = 'rsp_' + p.id;
+
+  // Per-category customisation
+  const catMeta = {
+    slides:   { icon:'📊', badge:'📄 Slide Preview', lockIcon:'🔒', ctaGrad:'linear-gradient(135deg,#0B1F3A,#1565C0)', lockBg:'rgba(11,31,58,.75)' },
+    books:    { icon:'📚', badge:'📖 Book Preview',  lockIcon:'📚', ctaGrad:'linear-gradient(135deg,#1B5E20,#2E7D32)', lockBg:'rgba(27,94,32,.78)' },
+    videos:   { icon:'🎬', badge:'▶ Video Preview',  lockIcon:'🎬', ctaGrad:'linear-gradient(135deg,#1a1a2e,#0f3460)', lockBg:'rgba(15,52,96,.78)' },
+    podcasts: { icon:'🎙️', badge:'🎧 Podcast Preview',lockIcon:'🎙️', ctaGrad:'linear-gradient(135deg,#2D1B69,#11998e)', lockBg:'rgba(45,27,105,.78)' },
+  };
+  const m = catMeta[p.category] || catMeta.slides;
+
+  return `
+    <div class="real-slide-wrap" id="${sid}"
+      style="position:relative;width:100%;height:100%;background:#111827;overflow:hidden;border-radius:var(--radius) var(--radius) 0 0;">
+
+      <!-- actual Google Drive iframe -->
+      <iframe
+        id="${sid}_frame"
+        src="${embedUrl}"
+        style="width:140%;height:140%;border:none;transform:scale(0.714);transform-origin:0 0;pointer-events:none;"
+        allow="autoplay"
+        loading="lazy"
+      ></iframe>
+
+      <!-- top fade -->
+      <div style="position:absolute;top:0;left:0;right:0;height:32px;
+        background:linear-gradient(180deg,rgba(17,24,39,.65),transparent);
+        pointer-events:none;z-index:3;"></div>
+
+      <!-- Page 3: blurred lock / CTA overlay -->
+      <div id="${sid}_lock" style="
+        display:none; position:absolute; inset:0; z-index:8;
+        background:${m.lockBg}; backdrop-filter:blur(12px) saturate(1.4);
+        flex-direction:column; align-items:center; justify-content:center;
+        gap:10px; text-align:center; padding:22px;
+      ">
+        <div style="font-size:2.4rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4));">${m.lockIcon}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:#fff;line-height:1.3;">
+          Get Full Access
+        </div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.72);line-height:1.5;">
+          ${p.title.substring(0,40)}${p.title.length>40?'…':''}<br>
+          <span style="font-weight:600;color:rgba(255,255,255,.9);">${(p.features||[]).length} resources included</span>
+        </div>
+        <div onclick="event.stopPropagation();showProduct(${p.id})" style="
+          margin-top:6px; background:${m.ctaGrad};
+          border:1px solid rgba(255,255,255,.25);
+          color:#fff; font-size:.8rem; font-weight:700;
+          padding:9px 22px; border-radius:50px; cursor:pointer;
+          box-shadow:0 4px 16px rgba(0,0,0,.35);
+          transition:all .2s;
+        " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          Buy Now — $${p.price}
+        </div>
+      </div>
+
+      <!-- top-right badge -->
+      <div class="preview-label" style="z-index:10;">${m.badge}</div>
+
+      <!-- prev arrow -->
+      <button id="${sid}_prev" onclick="event.stopPropagation();rspGo('${sid}',-1)" style="
+        position:absolute;left:8px;top:50%;transform:translateY(-50%);z-index:9;
+        width:30px;height:30px;border-radius:50%;
+        background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+        color:#fff;font-size:1rem;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;
+        backdrop-filter:blur(4px);transition:all .2s;opacity:0;
+      ">‹</button>
+
+      <!-- next arrow -->
+      <button id="${sid}_next" onclick="event.stopPropagation();rspGo('${sid}',1)" style="
+        position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:9;
+        width:30px;height:30px;border-radius:50%;
+        background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+        color:#fff;font-size:1rem;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;
+        backdrop-filter:blur(4px);transition:all .2s;
+      ">›</button>
+
+      <!-- dot indicators -->
+      <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:10;">
+        <div class="slide-dot active" id="${sid}_d0"></div>
+        <div class="slide-dot" id="${sid}_d1"></div>
+        <div class="slide-dot" id="${sid}_d2"></div>
+      </div>
+
+      <!-- page counter -->
+      <div id="${sid}_counter" style="
+        position:absolute;bottom:10px;right:12px;
+        font-size:.65rem;font-weight:700;color:rgba(255,255,255,.65);
+        z-index:10;background:rgba(0,0,0,.35);padding:2px 8px;
+        border-radius:50px;backdrop-filter:blur(4px);
+      ">1 / 3</div>
+    </div>`;
+}
+
+const rspState = {}; // sid -> { current, embedUrl, timer }
+
+function rspInit(sid) {
+  if (rspState[sid]) return; // already inited
+  const wrap = document.getElementById(sid);
+  if (!wrap) return;
+  const frame = document.getElementById(sid+'_frame');
+  if (!frame) return;
+  const embedUrl = frame.src.split('#')[0].split('?')[0];
+  rspState[sid] = { current: 0, embedUrl, timer: null };
+
+  // show prev arrow on hover
+  const prevBtn = document.getElementById(sid+'_prev');
+  wrap.addEventListener('mouseenter', ()=>{ if(prevBtn) prevBtn.style.opacity='1'; });
+  wrap.addEventListener('mouseleave', ()=>{ if(prevBtn) prevBtn.style.opacity='0'; });
+
+  // start auto-advance
+  rspState[sid].timer = setInterval(()=> rspGo(sid, 1), 3200);
+}
+
+// init all real-slide previews currently in DOM
+function initAllRSP() {
+  document.querySelectorAll('.real-slide-wrap').forEach(el=>{
+    rspInit(el.id);
+  });
+}
+
+function rspGo(sid, dir) {
+  const state = rspState[sid];
+  if (!state) return;
+  const frame   = document.getElementById(sid+'_frame');
+  const lock    = document.getElementById(sid+'_lock');
+  const counter = document.getElementById(sid+'_counter');
+  if (!frame) return;
+
+  // clear existing timer
+  if (state.timer) { clearInterval(state.timer); clearTimeout(state.timer); state.timer = null; }
+
+  const total = 3;
+  state.current = (state.current + dir + total) % total;
+  const cur = state.current;
+
+  // update dots
+  for (let i = 0; i < total; i++) {
+    const d = document.getElementById(sid+'_d'+i);
+    if (d) d.classList.toggle('active', i === cur);
+  }
+  if (counter) counter.textContent = `${cur+1} / ${total}`;
+
+  if (cur === 2) {
+    // show blurred CTA lock overlay
+    lock.style.display = 'flex';
+    // loop back after pause
+    state.timer = setTimeout(()=>{ state.current = -1; rspGo(sid, 1); }, 4500);
+  } else {
+    lock.style.display = 'none';
+    // Reload iframe with page hash
+    frame.src = state.embedUrl + '#page=' + (cur + 1);
+    state.timer = setInterval(()=> rspGo(sid, 1), 3400);
+  }
+}
+
+
+function buildSlidePreview(p) {
+  const id = 'sf_'+p.id;
+  const bullets = (p.features||[]).slice(0,4);
+  const chartHeights = [55,80,60,95,70,85,50];
+  const chartColors = ['#1E88E5','#00796B','#1565C0','#26A69A','#1E88E5','#00796B','#1565C0'];
+  const chart = chartHeights.map((h,i)=>`<span style="height:${h}%;background:${chartColors[i]}"></span>`).join('');
+
+  setTimeout(()=>{ initSlider(id); }, 100);
+  return `
+    <div class="slide-flipper" id="${id}">
+      <div class="preview-label">▶ Preview</div>
+      <!-- Slide 1: Cover -->
+      <div class="slide-frame sf-cover active" data-idx="0">
+        <div class="sf-top">
+          <div class="sf-logo">📊</div>
+          <div class="sf-tag">Preview</div>
+        </div>
+        <div>
+          <div class="sf-title">${p.title}</div>
+          <div class="sf-sub">${(p.tags||[]).slice(0,2).join(' · ')}</div>
+          <div class="sf-bars">
+            <div class="sf-bar" style="width:60%;"></div>
+            <div class="sf-bar" style="width:30%;opacity:.4;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 2: Content -->
+      <div class="slide-frame sf-content" data-idx="1">
+        <div class="sf-heading">What's Inside</div>
+        <ul class="sf-bullets">
+          ${bullets.map(b=>`<li>${b}</li>`).join('')}
+        </ul>
+        <div class="sf-chart">${chart}</div>
+      </div>
+      <!-- Slide 3: CTA -->
+      <div class="slide-frame sf-end" data-idx="2">
+        <div class="sf-lock">🔒</div>
+        <div class="sf-cta">Get Full Access</div>
+        <div class="sf-cta-sub">${(p.features||[]).length}+ resources included</div>
+        <div class="sf-btn">Buy Now — $${p.price}</div>
+      </div>
+      <!-- Dots -->
+      <div class="slide-dots" id="${id}_dots">
+        <div class="slide-dot dark active"></div>
+        <div class="slide-dot dark"></div>
+        <div class="slide-dot"></div>
+      </div>
+    </div>`;
+}
+
+function buildBookPreview(p) {
+  return `
+    <div class="book-preview">
+      <div class="bp-glow"></div>
+      <div class="book-3d">
+        <div class="book-page-b"></div>
+        <div class="book-page-a"></div>
+        <div class="book-cover">
+          <div class="bc-icon">📚</div>
+          <div class="bc-title">${p.title.substring(0,28)}</div>
+          <div class="bc-line"></div>
+          <div class="bc-author">MedStore Pro</div>
+        </div>
+      </div>
+      <div class="bp-pages">${(p.features||['200+ pages'])[0]}</div>
+      <div class="preview-label">📖 Preview</div>
+    </div>`;
+}
+
+function buildVideoPreview(p) {
+  const epCount = parseInt((p.features||['12 videos'])[0]) || 4;
+  const eps = Array.from({length:Math.min(epCount,8)},(_,i)=>{
+    const cls = i<2?'done':i===2?'now':'';
+    return `<div class="vp-ep"><div class="vp-ep-f ${cls}"></div></div>`;
+  }).join('');
+  return `
+    <div class="video-preview">
+      <div class="vp-grid"></div>
+      <div class="vp-thumb">
+        <div class="vp-play">▶</div>
+        <div class="vp-title">${p.title.substring(0,32)}...</div>
+        <div class="vp-dur">🎬 ${(p.features||['HD Video'])[0]}</div>
+      </div>
+      <div class="vp-strip">
+        <div class="vp-ep-row">${eps}</div>
+        <div class="vp-scrub"><div class="vp-prog"></div></div>
+      </div>
+      <div class="preview-label">▶ Watch Preview</div>
+    </div>`;
+}
+
+function buildPodcastPreview(p) {
+  const waveBars = Array.from({length:22},(_,i)=>{
+    const h = [20,35,55,80,60,90,45,70,95,50,75,40,85,65,30,88,58,42,72,38,62,48][i]||50;
+    const delay = (i*0.07).toFixed(2);
+    return `<div class="pp-b" style="height:${h}%;animation-delay:${delay}s"></div>`;
+  }).join('');
+  return `
+    <div class="podcast-preview">
+      <div class="pp-icon">🎙️</div>
+      <div class="pp-ep">Episode Preview</div>
+      <div class="pp-title">${p.title.substring(0,36)}...</div>
+      <div class="pp-wave">${waveBars}</div>
+      <div class="pp-controls">
+        <div class="pp-btn">⏮</div>
+        <div class="pp-btn main">▶</div>
+        <div class="pp-btn">⏭</div>
+      </div>
+      <div class="pp-bar-wrap">
+        <div class="pp-bar-bg"><div class="pp-bar-fill"></div></div>
+      </div>
+      <div class="preview-label">🎧 Listen Free</div>
+    </div>`;
+}
+
+// ─── SLIDE AUTO-FLIPPER ───
+const sliderTimers = {};
+function initSlider(id) {
+  const wrap = document.getElementById(id);
+  if (!wrap) return;
+  if (sliderTimers[id]) clearInterval(sliderTimers[id]);
+  let current = 0;
+  const frames = wrap.querySelectorAll('.slide-frame');
+  const dots = wrap.querySelectorAll('.slide-dot');
+  function goTo(next) {
+    frames[current].classList.remove('active');
+    frames[current].classList.add('exit');
+    setTimeout(()=>{ frames[current].classList.remove('exit'); }, 500);
+    dots[current].classList.remove('active');
+    current = next % frames.length;
+    frames[current].classList.add('active');
+    dots[current].classList.add('active');
+    // dots on last (teal) slide should be white
+    dots.forEach((d,i)=>{
+      d.classList.toggle('dark', current !== 2);
+    });
+  }
+  sliderTimers[id] = setInterval(()=>{
+    goTo(current + 1);
+  }, 2800);
+}
+
 
 // ─── PRODUCT DETAIL ───
 function showProduct(id) {
@@ -934,14 +1498,16 @@ function showProduct(id) {
   const p = store.products.find(x=>x.id===id);
   if (!p) return;
   const cat = getCat(p.category);
-  const thumb = thumbClass(p.category);
   const features = (p.features||[]).map(f=>`<li>${f}</li>`).join('');
   const tags = (p.tags||[]).map(t=>`<span class="detail-tag">${t}</span>`).join('');
   const discount = p.origPrice>0 ? Math.round((1-p.price/p.origPrice)*100) : 0;
+  const previewHtml = buildPreview(p, cat);
 
   document.getElementById('detailContent').innerHTML = `
     <div class="detail-left">
-      <div class="detail-thumb ${thumb}">${cat.icon}</div>
+      <div class="detail-thumb" style="padding:0;overflow:hidden;background:none;">
+        <div style="width:100%;height:100%;position:relative;">${previewHtml}</div>
+      </div>
       <div class="detail-cat">${cat.name}</div>
       <h1 class="detail-title">${p.title}</h1>
       <p class="detail-desc">${p.desc}</p>
@@ -953,7 +1519,7 @@ function showProduct(id) {
         <div class="payment-price">$${p.price}${p.origPrice>0?`<span class="orig">$${p.origPrice}</span>`:''}</div>
         ${discount>0?`<div class="payment-save">💰 You save ${discount}% today!</div>`:''}
         <button class="btn-buynow" onclick="showPaymentFlow(${p.id})">🛒 Buy Now — $${p.price}</button>
-        <button class="btn-preview">👁 Preview Sample</button>
+        ${p.previewLink ? `<button class="btn-preview" onclick="window.open('${p.previewLink}','_blank')">👁 View Free Preview Sample</button>` : `<button class="btn-preview" onclick="showToast('No preview available for this product','')">👁 Preview Not Available</button>`}
         <div class="payment-divider">or pay with QR code</div>
         <div class="qr-section">
           <div class="qr-label">📱 Scan to Pay</div>
@@ -964,7 +1530,7 @@ function showProduct(id) {
           <div class="payment-step"><div class="step-num">1</div><span>Scan QR code or click payment link</span></div>
           <div class="payment-step"><div class="step-num">2</div><span>Complete payment ($${p.price})</span></div>
           <div class="payment-step"><div class="step-num">3</div><span>Upload proof of payment below</span></div>
-          <div class="payment-step"><div class="step-num">4</div><span>Receive file via email within 1 hour</span></div>
+          <div class="payment-step"><div class="step-num">4</div><span>Check <strong>My Orders</strong> page with your Order ID to get download link</span></div>
         </div>
         <div style="margin-top:16px;">
           <div class="form-group">
@@ -989,6 +1555,8 @@ function showProduct(id) {
     </div>`;
 
   showPage('detail');
+  if (p.category==='slides' && !p.previewLink) setTimeout(()=>initSlider('sf_'+p.id), 200);
+  if (p.previewLink) setTimeout(()=>{ initAllRSP(); }, 300);
 }
 
 function handleProofUpload(input) {
@@ -1003,15 +1571,34 @@ function submitOrder(productId) {
   if (!name || !email) { showToast('Please fill in your name and email','error'); return; }
   if (!/\S+@\S+\.\S+/.test(email)) { showToast('Invalid email address','error'); return; }
   const p = store.products.find(x=>x.id===productId);
-  const orderId = 'ORD-' + String(Date.now()).slice(-4);
+  const orderId = 'ORD-' + String(Date.now()).slice(-5);
   store.orders.push({
     id:orderId, date:new Date().toISOString().slice(0,10),
     customer:name, email:email, productId:productId,
     amount:p.price, status:'pending', proof:'uploaded'
   });
   saveStore();
-  showToast('✅ Order submitted! We\'ll email you within 1 hour after payment confirmation.','success');
-  setTimeout(()=>showPage('products'),2500);
+  // Show confirmation with order ID
+  const card = document.querySelector('.payment-card');
+  if (card) {
+    card.innerHTML = `
+      <div style="text-align:center;padding:20px 0;">
+        <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:8px;">Order Submitted!</h3>
+        <p style="color:var(--gray-600);font-size:.93rem;margin-bottom:20px;line-height:1.6;">Your payment proof has been received. We'll approve it within <strong>1 hour</strong>.</p>
+        <div style="background:var(--sky);border:2px solid var(--blue);border-radius:12px;padding:16px;margin-bottom:20px;">
+          <div style="font-size:.78rem;color:var(--gray-400);margin-bottom:4px;">Your Order ID — save this!</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--blue);letter-spacing:.08em;">${orderId}</div>
+        </div>
+        <p style="font-size:.85rem;color:var(--gray-600);margin-bottom:16px;">Use your Order ID or email to check status and get your download link:</p>
+        <button onclick="document.getElementById('lookupInput').value='${orderId}';showPage('myorders');lookupOrder();" style="width:100%;padding:13px;border-radius:50px;background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff;border:none;font-weight:700;cursor:pointer;font-size:.95rem;">
+          📦 Track My Order
+        </button>
+        <button onclick="showPage('products')" style="width:100%;margin-top:10px;padding:12px;border-radius:50px;background:transparent;border:2px solid var(--gray-200);color:var(--gray-600);font-weight:600;cursor:pointer;font-size:.9rem;">
+          Continue Shopping
+        </button>
+      </div>`;
+  }
 }
 
 // ─── ADMIN LOGIN ───
@@ -1095,6 +1682,7 @@ function renderDashboard() {
 function renderProductsTable() {
   document.getElementById('productsTable').innerHTML = store.products.map(p=>{
     const cat = getCat(p.category);
+    const hasLink = p.downloadLink && p.downloadLink.trim();
     return `<tr>
       <td><div style="display:flex;align-items:center;gap:10px;">
         <div class="color-thumb ${thumbClass(p.category)}">${cat.icon}</div>
@@ -1103,6 +1691,9 @@ function renderProductsTable() {
       <td>${cat.name}</td>
       <td>$${p.price}</td>
       <td>${p.sales}</td>
+      <td>${hasLink
+        ? `<a href="${p.downloadLink}" target="_blank" style="color:var(--teal);font-size:.8rem;font-weight:600;">🔗 Link Set</a>`
+        : `<span style="color:var(--red);font-size:.8rem;">⚠️ No link</span>`}</td>
       <td><span class="status-badge active">${p.status}</span></td>
       <td><div class="action-buttons">
         <button class="icon-btn edit" onclick="editProduct(${p.id})" title="Edit">✏️</button>
@@ -1129,6 +1720,7 @@ function renderOrdersTable(filter) {
   orders = [...orders].sort((a,b)=>new Date(b.date)-new Date(a.date));
   document.getElementById('ordersTable').innerHTML = orders.map(o=>{
     const p = store.products.find(x=>x.id===o.productId)||{title:'Unknown'};
+    const dlReady = o.deliveryLink || (o.status==='paid' && p.downloadLink);
     return `<tr>
       <td><strong>${o.id}</strong></td>
       <td>${o.date}</td>
@@ -1137,6 +1729,9 @@ function renderOrdersTable(filter) {
       <td>${p.title.substring(0,20)}...</td>
       <td><strong>$${o.amount}</strong></td>
       <td>${o.proof?'<span style="color:var(--teal);font-size:.82rem;">📎 Uploaded</span>':'<span style="color:var(--gray-400);font-size:.82rem;">—</span>'}</td>
+      <td>${dlReady
+        ? `<a href="${o.deliveryLink||p.downloadLink}" target="_blank" style="color:var(--teal);font-size:.8rem;font-weight:600;">✅ Ready</a>`
+        : `<span style="color:var(--gray-400);font-size:.8rem;">Pending</span>`}</td>
       <td><span class="status-badge ${o.status}">${o.status}</span></td>
       <td><div class="action-buttons">
         <button class="btn-action ${o.status==='pending'?'primary':'ghost'}" style="padding:6px 12px;font-size:.78rem;" onclick="viewOrder('${o.id}')">
@@ -1211,9 +1806,11 @@ function openProductModal(editId) {
       document.getElementById('pStatus').value=p.status;
       document.getElementById('pFeatures').value=(p.features||[]).join('\n');
       document.getElementById('pTags').value=(p.tags||[]).join(', ');
+      document.getElementById('pDownloadLink').value=p.downloadLink||'';
+      document.getElementById('pPreviewLink').value=p.previewLink||'';
     }
   } else {
-    ['pTitle','pDesc','pPrice','pOrigPrice','pFeatures','pTags'].forEach(id=>document.getElementById(id).value='');
+    ['pTitle','pDesc','pPrice','pOrigPrice','pFeatures','pTags','pDownloadLink','pPreviewLink'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('pBadge').value='';
     document.getElementById('pStatus').value='active';
   }
@@ -1235,6 +1832,8 @@ function saveProduct() {
     status:document.getElementById('pStatus').value,
     features:document.getElementById('pFeatures').value.split('\n').filter(x=>x.trim()),
     tags:document.getElementById('pTags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    downloadLink:document.getElementById('pDownloadLink').value.trim(),
+    previewLink:document.getElementById('pPreviewLink').value.trim(),
   };
   if (editId) {
     const idx=store.products.findIndex(p=>p.id===editId);
@@ -1276,7 +1875,8 @@ function deleteCat(id) {
 function viewOrder(id) {
   currentOrderId=id;
   const o = store.orders.find(x=>x.id===id);
-  const p = store.products.find(x=>x.id===o.productId)||{title:'Unknown'};
+  const p = store.products.find(x=>x.id===o.productId)||{title:'Unknown',downloadLink:''};
+  const hasLink = p.downloadLink && p.downloadLink.trim();
   document.getElementById('orderModalContent').innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
       <div><div style="font-size:.78rem;color:var(--gray-400);margin-bottom:2px;">Order ID</div><div style="font-weight:700;">${o.id}</div></div>
@@ -1289,6 +1889,16 @@ function viewOrder(id) {
     <div style="padding:12px;background:${o.status==='paid'?'#DCFCE7':o.proof?'#FEF9C3':'var(--gray-100)'};border-radius:10px;margin-bottom:12px;">
       <strong>Status:</strong> <span class="status-badge ${o.status}">${o.status}</span>
       ${o.proof?`<div style="margin-top:8px;font-size:.85rem;color:var(--teal);">📎 Payment proof uploaded: ${o.proof}</div>`:'<div style="margin-top:8px;font-size:.85rem;color:var(--gray-400);">No proof uploaded yet</div>'}
+    </div>
+    <div style="margin-bottom:14px;">
+      <label class="form-label">🔗 Download Link for this Product</label>
+      ${hasLink
+        ? `<div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--mint);border:1px solid var(--teal);border-radius:10px;font-size:.85rem;word-break:break-all;">
+            <span>🔗</span><a href="${p.downloadLink}" target="_blank" style="color:var(--teal);font-weight:600;">${p.downloadLink}</a>
+           </div>
+           <div style="font-size:.78rem;color:var(--teal);margin-top:5px;">✅ This link will be shown to client after approval</div>`
+        : `<div style="padding:10px 14px;background:var(--gray-100);border-radius:10px;font-size:.85rem;color:var(--gray-400);">⚠️ No download link set for this product. <a href="#" onclick="document.getElementById('orderModal').style.display='none';editProduct(${p.id});return false;" style="color:var(--blue);">Add link in product settings →</a></div>`
+      }
     </div>`;
   const btn = document.getElementById('approveBtn');
   btn.style.display = o.status==='paid' ? 'none' : 'block';
@@ -1297,12 +1907,72 @@ function viewOrder(id) {
 
 function approveOrder() {
   const o = store.orders.find(x=>x.id===currentOrderId);
-  if (o) { o.status='paid'; saveStore(); renderOrdersTable('all'); renderDashboard(); }
+  if (o) {
+    o.status='paid';
+    o.approvedDate = new Date().toISOString().slice(0,10);
+    const p = store.products.find(x=>x.id===o.productId);
+    if (p && p.downloadLink) o.deliveryLink = p.downloadLink;
+    saveStore(); renderOrdersTable('all'); renderDashboard();
+  }
   document.getElementById('orderModal').style.display='none';
-  showToast('✅ Payment approved! Customer will be notified.','success');
+  showToast('✅ Payment approved! Client can now access their download link.','success');
 }
 
-// ─── TOAST ───
+// ─── ORDER LOOKUP (Client side) ───
+function lookupOrder() {
+  const q = document.getElementById('lookupInput').value.trim().toLowerCase();
+  if (!q) { showToast('Please enter your Order ID or email','error'); return; }
+  const matches = store.orders.filter(o=>
+    o.id.toLowerCase()===q || o.email.toLowerCase()===q
+  );
+  const result = document.getElementById('lookupResult');
+  if (!matches.length) {
+    result.innerHTML = `<div style="padding:20px;background:#FEE2E2;border-radius:12px;text-align:center;color:var(--red);font-weight:600;">❌ No orders found. Please check your Order ID or email.</div>`;
+    return;
+  }
+  result.innerHTML = matches.map(o=>{
+    const p = store.products.find(x=>x.id===o.productId)||{title:'Unknown',icon:'📄'};
+    const cat = getCat(p.category);
+    const isPaid = o.status==='paid';
+    const dlLink = o.deliveryLink || (isPaid && p.downloadLink ? p.downloadLink : '');
+    return `
+      <div class="order-result-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div style="font-size:2rem;">${cat.icon}</div>
+          <div>
+            <div style="font-weight:700;font-size:1rem;color:var(--navy);">${p.title}</div>
+            <div style="font-size:.82rem;color:var(--gray-400);">Order: <strong>${o.id}</strong> · ${o.date}</div>
+          </div>
+          <span class="status-badge ${o.status}" style="margin-left:auto;">${o.status}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:.88rem;color:var(--gray-600);">
+          <span>👤 ${o.customer}</span>
+          <span>💵 $${o.amount}</span>
+        </div>
+        ${isPaid && dlLink
+          ? `<div class="download-box">
+              <div class="dl-icon">🎉</div>
+              <h3>Payment Confirmed!</h3>
+              <p>Your content is ready. Click the button below to access your download.</p>
+              <a class="btn-download" href="${dlLink}" target="_blank" rel="noopener">
+                ⬇️ Download Now
+              </a>
+              <div style="margin-top:12px;font-size:.78rem;color:var(--gray-400);">Save the link — you can come back here anytime to re-download.</div>
+            </div>`
+          : isPaid
+          ? `<div style="padding:16px;background:var(--mint);border-radius:12px;text-align:center;color:var(--teal);font-weight:600;">
+              ✅ Payment confirmed — download link will be available shortly. Contact us if you need assistance.
+             </div>`
+          : `<div style="padding:16px;background:#FEF9C3;border-radius:12px;text-align:center;color:#854D0E;">
+              ⏳ <strong>Pending Review</strong> — Your payment proof has been received. We'll approve it within 1 hour and your download link will appear here.
+              <div style="margin-top:8px;font-size:.82rem;">Tip: Refresh this page after 1 hour to check your status.</div>
+             </div>`
+        }
+      </div>`;
+  }).join('');
+}
+
+
 function showToast(msg, type='') {
   const t=document.getElementById('toast');
   t.textContent=msg; t.className='toast'+(type?' '+type:'');
@@ -1314,7 +1984,16 @@ function showToast(msg, type='') {
 window.addEventListener('load', ()=>{
   renderHome();
   document.getElementById('loginCode').addEventListener('keyup',e=>{ if(e.key==='Enter') doLogin(); });
+  // Enter key for order lookup
+  const li = document.getElementById('lookupInput');
+  if (li) li.addEventListener('keyup',e=>{ if(e.key==='Enter') lookupOrder(); });
 });
+
+// showPaymentFlow — scroll to buy section (already inline on detail page)
+function showPaymentFlow(id) {
+  const card = document.querySelector('.payment-card');
+  if (card) card.scrollIntoView({behavior:'smooth', block:'start'});
+}
 
 // Animate hero stat
 setTimeout(()=>{
